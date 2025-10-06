@@ -1,0 +1,226 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Google Translate Widget Styles - Completely Hidden */
+.goog-te-banner-frame,
+.goog-te-gadget,
+.goog-te-combo,
+.goog-te-menu-value,
+.goog-te-menu-frame,
+.skiptranslate,
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  width: 0 !important;
+  overflow: hidden !important;
+}
+
+body {
+  top: 0 !important;
+  margin-top: 0 !important;
+}
+
+/* Ensure no Google Translate elements are visible */
+iframe[src*="translate.google.com"] {
+  display: none !important;
+}
+
+/* Hide any Google Translate related elements */
+[class*="goog-te"] {
+  display: none !important;
+}
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  html, body {
+    overflow-x: hidden;
+  }
+  
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    /* Normal Theme - Professional Blue */
+    --primary: 221 83% 53%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 199 89% 48%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 220 14% 96%;
+    --muted-foreground: 218 11% 35%;
+
+    --accent: 221 89% 66%;
+    --accent-foreground: 0 0% 0%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221 83% 53%;
+    
+    /* Normal Theme Colors */
+    --india-saffron: 221 83% 53%;
+    --india-saffron-light: 221 83% 70%;
+    --india-white: 0 0% 100%;
+    --india-green: 199 89% 48%;
+    --india-green-light: 199 89% 65%;
+    --india-blue: 221 83% 53%;
+    
+    /* Normal Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(221 83% 53%), hsl(217 91% 60%));
+    --gradient-nav: linear-gradient(90deg, hsl(221 83% 53%), hsl(199 89% 48%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(45 29% 97%));
+    --gradient-patriotic: linear-gradient(135deg, hsl(221 83% 53%), hsl(199 89% 48%));
+
+    --radius: 0.5rem;
+    /* Normal Shadows */
+    --shadow-elegant: 0 10px 30px -10px hsl(var(--primary) / 0.3);
+    --shadow-glow: 0 0 40px hsl(var(--india-green) / 0.4);
+    --shadow-patriotic: 0 15px 35px -5px hsl(221 83% 53% / 0.3), 0 5px 15px -5px hsl(199 89% 48% / 0.2);
+
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  /* Independence Day Theme */
+  [data-theme="independence-day"] {
+    /* Independence Day Theme - Indian Flag Colors */
+    --primary: 25 100% 55%; /* Saffron Orange */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 125 60% 40%; /* Indian Green */
+    --secondary-foreground: 0 0% 100%;
+
+    --accent: 25 100% 65%; /* Light Saffron */
+    --accent-foreground: 0 0% 0%;
+
+    --ring: 25 100% 55%;
+    
+    /* Independence Day Colors - Indian Flag */
+    --india-saffron: 25 100% 55%; /* Saffron/Orange */
+    --india-saffron-light: 25 100% 75%;
+    --india-white: 0 0% 100%; /* Pure White */
+    --india-green: 125 60% 40%; /* Deep Green */
+    --india-green-light: 125 60% 60%;
+    --india-blue: 221 83% 53%; /* Chakra Blue */
+    
+    /* Patriotic Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(25 100% 55%), hsl(125 60% 40%));
+    --gradient-nav: linear-gradient(90deg, hsl(25 100% 55%), hsl(0 0% 100%), hsl(125 60% 40%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(25 100% 95%));
+    --gradient-patriotic: linear-gradient(180deg, hsl(25 100% 55%) 0%, hsl(0 0% 100%) 50%, hsl(125 60% 40%) 100%);
+
+    /* Independence Day Shadows */
+    --shadow-elegant: 0 10px 30px -10px hsl(var(--primary) / 0.3);
+    --shadow-glow: 0 0 40px hsl(var(--india-saffron) / 0.4);
+    --shadow-patriotic: 0 15px 35px -5px hsl(25 100% 55% / 0.3), 0 5px 15px -5px hsl(125 60% 40% / 0.2);
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 25 100% 55%; /* Saffron for dark mode */
+    --primary-foreground: 0 0% 0%;
+
+    --secondary: 125 60% 50%; /* Brighter green for dark mode */
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 25 100% 65%;
+    --accent-foreground: 0 0% 0%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 25 100% 55%;
+    
+    --india-saffron: 25 100% 65%;
+    --india-saffron-light: 25 100% 80%;
+    --india-white: 0 0% 95%;
+    --india-green: 125 60% 50%;
+    --india-green-light: 125 60% 70%;
+    --india-blue: 221 83% 60%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  :focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px hsl(var(--ring) / 0.35);
+    border-radius: 6px;
+    transition: var(--transition-smooth);
+  }
+}
+
+@layer components {
+  .card-surface {
+    @apply bg-white rounded-xl shadow-elegant ring-1 ring-black/5;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:opacity-90 transition-colors;
+  }
+
+  .btn-outline-primary {
+    @apply border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-colors;
+  }
+}

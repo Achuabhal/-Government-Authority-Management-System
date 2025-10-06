@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Bangalore Development Authority - Government of Karnataka</title>
+    <meta name="description" content="Official website of Bangalore Development Authority (BDA), Government of Karnataka. Urban development, site allotment, housing projects, and citizen services." />
+    <meta name="author" content="Bangalore Development Authority" />
+    <meta name="keywords" content="BDA, Bangalore Development Authority, Karnataka Government, Urban Development, Site Allotment, Housing, Bangalore" />
+
+    <meta property="og:title" content="Bangalore Development Authority - Government of Karnataka" />
+    <meta property="og:description" content="Official website of Bangalore Development Authority providing urban development services, site allotment, and housing projects for Bangalore citizens." />
+    <meta property="og:type" content="government" />
+    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@lovable_dev" />
+    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Google Translate Script - Completely Hidden -->
+    <script>
+      function googleTranslateElementInit() {
+        console.log('HTML: Google Translate initializing...');
+        new google.translate.TranslateElement({
+          pageLanguage: 'en',
+          includedLanguages: 'en,kn',
+          layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL,
+          autoDisplay: false,
+          multilanguagePage: true
+        }, 'google_translate_element');
+        console.log('HTML: Google Translate initialized');
+        
+        // Listen for custom translation events
+        window.addEventListener('googtrans', function(event) {
+          console.log('HTML: Custom googtrans event received:', event.detail);
+          const targetLang = event.detail.targetLang;
+          const combo = document.querySelector('.goog-te-combo');
+          if (combo) {
+            console.log('HTML: Setting combo value to:', targetLang);
+            combo.value = targetLang;
+            combo.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        });
+      }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    
+    <!-- Hidden Google Translate Element -->
+    <div id="google_translate_element" style="position: absolute; top: 0; left: 0; width: 1px; height: 1px; overflow: hidden; opacity: 0.01;"></div>
+    
+    <!-- Hide Google Translate Bar -->
+    <style>
+      .goog-te-banner-frame { display: none !important; }
+      .goog-te-gadget { 
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 1px !important;
+        height: 1px !important;
+        overflow: hidden !important;
+        opacity: 0.01 !important;
+        pointer-events: none !important;
+      }
+      .goog-te-combo { 
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 1px !important;
+        height: 1px !important;
+        overflow: hidden !important;
+        opacity: 0.01 !important;
+        pointer-events: none !important;
+      }
+      .goog-te-menu-value { display: none !important; }
+      .goog-te-menu-frame { display: none !important; }
+      body { top: 0 !important; }
+      .skiptranslate { display: none !important; }
+    </style>
+  </body>
+</html>
