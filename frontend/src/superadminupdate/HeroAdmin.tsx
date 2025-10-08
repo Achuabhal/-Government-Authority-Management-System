@@ -24,6 +24,7 @@ const HeroAdmin = () => {
       try {
         setLoading(true);
         const response = await api.get("/content/banner");
+        console.log("[HeroAdmin] GET /content/banner response", response?.status, response?.data);
         if (response.data && response.data.images && Array.isArray(response.data.images)) {
           // Map images array to HeroSlide format
           const mappedSlides: HeroSlide[] = response.data.images.map((imgUrl: string) => ({

@@ -211,18 +211,7 @@ const AdminLayout = () => {
 
       {/* Main Content */}
       <main className="p-8">
-        <div className="flex flex-col items-center justify-center text-center bg-white rounded-2xl shadow-md py-10 mb-8">
-          <h1 className="text-3xl font-semibold text-gray-700 mb-2">
-            {loading ? "Loading..." : toggleState.message}
-          </h1>
-          <Button
-            onClick={toggleDay}
-            disabled={loading}
-            className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-8 py-2 rounded-lg shadow-md transition-all duration-200"
-          >
-            {toggleState.isActive ? "Switch to Normal Day" : "Activate Special Day"}
-          </Button>
-        </div>
+        
 
         {/* Page Content */}
         <Outlet />

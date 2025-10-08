@@ -13,42 +13,14 @@ const leadAdminToggle = require('../leadadminmodal/button');
 const leadAdminGallery = require('../leadadminmodal/content');
 const leadAdminNews = require('../leadadminmodal/news');
 const leadAdminBanner = require('../leadadminmodal/img');
+const logger = require('../controler/logger'); // ✅ Winston logger
+
 // ------------------- GALLERY ROUTES -------------------
 
-// PUT /gallery - replace the gallery images array
-
-router.put('/restore', async (req, res) => {
-  try {
-    // Fetch data from normal collections
-    const galleryData = await Gallery.find();
-    const newsData = await News.find();
-    const toggleData = await Toggle.find();
-    const bannerData = await Galleryy.find();
-
-    // Replace admin collections with normal data
-    await AdminGallery.deleteMany();
-    await AdminGallery.insertMany(galleryData);
-
-    await AdminNews.deleteMany();
-    await AdminNews.insertMany(newsData);
-
-    await AdminToggle.deleteMany();
-    await AdminToggle.insertMany(toggleData);
-
-    await AdminBanner.deleteMany();
-    await AdminBanner.insertMany(bannerData);
-
-    res.status(200).json({ message: 'Admin data restored from normal collections successfully' });
-  } catch (error) {
-    console.error('Error restoring admin data:', error);
-    res.status(500).json({ error: 'Failed to restore admin data' });
-  }
-}),
-
-router.put('/gallery',  async (req, res) => {
+// PUT /gallery
+router.put('/gallery', async (req, res) => {
   try {
     const { galleryImages } = req.body;
-
     if (!Array.isArray(galleryImages)) {
       return res.status(400).json({ error: "galleryImages must be an array" });
     }
@@ -57,19 +29,21 @@ router.put('/gallery',  async (req, res) => {
     if (gallery) {
       gallery.galleryImages = galleryImages;  
       await gallery.save();
+      logger.info('Gallery updated', { action: 'PUT /gallery', galleryImages });
     } else {
       gallery = new AdminGallery({ galleryImages });
       await gallery.save();
+      logger.info('Gallery created', { action: 'PUT /gallery', galleryImages });
     }
 
     res.json({ message: "Gallery updated successfully", gallery });
   } catch (err) {
-    console.error('PUT /gallery error:', err);
+    logger.error('PUT /gallery error', { error: err.message });
     res.status(500).json({ error: "Server error" });
   }
 });
 
-// GET /gallery - get gallery images
+// GET /gallery
 router.get('/gallery', authMiddleware, async (req, res) => {
   try {
     let gallery = await AdminGallery.findOne();
@@ -79,14 +53,14 @@ router.get('/gallery', authMiddleware, async (req, res) => {
     }
     res.json({ galleryImages: gallery.galleryImages, _id: gallery._id });
   } catch (err) {
-    console.error('GET /gallery error:', err);
+    logger.error('GET /gallery error', { error: err.message });
     res.status(500).json({ message: 'Server Error' });
   }
 });
 
 // ------------------- NEWS ROUTES -------------------
 
-// PUT /news - append news items
+// PUT /news
 router.put('/news', authMiddleware, async (req, res) => {
   try {
     const { newsItems } = req.body;
@@ -98,31 +72,33 @@ router.put('/news', authMiddleware, async (req, res) => {
     if (newsDoc) {
       newsDoc.newsItems = [...(newsDoc.newsItems || []), ...newsItems];
       await newsDoc.save();
+      logger.info('News updated', { action: 'PUT /news', newsItems, user: req.user?.id });
     } else {
       newsDoc = new AdminNews({ newsItems });
       await newsDoc.save();
+      logger.info('News created', { action: 'PUT /news', newsItems, user: req.user?.id });
     }
 
     res.json({ message: "News updated successfully", news: newsDoc });
   } catch (err) {
-    console.error('PUT /news error:', err);
+    logger.error('PUT /news error', { error: err.message, user: req.user?.id });
     res.status(500).json({ error: "Server error" });
   }
 });
 
-// GET /news - all news
+// GET /news
 router.get('/news', async (req, res) => {
   try {
     const newsDoc = await AdminNews.findOne();
     const items = newsDoc ? newsDoc.newsItems : [];
     res.json({ newsItems: items });
   } catch (err) {
-    console.error('GET /news error:', err);
+    logger.error('GET /news error', { error: err.message });
     res.status(500).json({ error: 'Server error' });
   }
 });
 
-// GET /news/:id - single news item
+// GET /news/:id
 router.get('/news/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -136,14 +112,14 @@ router.get('/news/:id', async (req, res) => {
 
     res.json(item);
   } catch (err) {
-    console.error('GET /news/:id error:', err);
+    logger.error('GET /news/:id error', { error: err.message });
     res.status(500).json({ error: 'Server error' });
   }
 });
 
 // ------------------- TOGGLE ROUTES -------------------
 
-// PUT /toggle - update toggle state
+// PUT /toggle
 router.put('/toggle', authMiddleware, async (req, res) => {
   try {
     const { isActive } = req.body;
@@ -154,13 +130,15 @@ router.put('/toggle', authMiddleware, async (req, res) => {
       toggle.isActive = isActive;
     }
     await toggle.save();
+    logger.info('Toggle updated', { action: 'PUT /toggle', isActive, user: req.user?.id });
     res.json({ isActive: toggle.isActive });
   } catch (err) {
+    logger.error('PUT /toggle error', { error: err.message, user: req.user?.id });
     res.status(500).json({ error: err.message });
   }
 });
 
-// GET /toggle - get toggle state
+// GET /toggle
 router.get('/toggle', authMiddleware, async (req, res) => {
   try {
     let toggle = await AdminToggle.findOne();
@@ -171,13 +149,14 @@ router.get('/toggle', authMiddleware, async (req, res) => {
     const message = toggle.isActive ? "Independence Day" : "Normal Day";
     res.json({ isActive: toggle.isActive, message });
   } catch (err) {
+    logger.error('GET /toggle error', { error: err.message });
     res.status(500).json({ error: err.message });
   }
 });
 
 // ------------------- BANNER ROUTES -------------------
 
-// PUT /banner - update banner images
+// PUT /banner
 router.put('/banner', authMiddleware, async (req, res) => {
   try {
     const { images } = req.body;
@@ -192,111 +171,52 @@ router.put('/banner', authMiddleware, async (req, res) => {
       banner.images = images;
     }
     await banner.save();
-
+    logger.info('Banner updated', { action: 'PUT /banner', images, user: req.user?.id });
     res.json(banner);
   } catch (err) {
-    console.error('PUT /banner error:', err);
+    logger.error('PUT /banner error', { error: err.message, user: req.user?.id });
     res.status(500).json({ message: 'Server Error' });
   }
 });
 
-router.post("/remove", async (req, res) => {
-  const { id } = req.body; // this is the _id of the news item inside newsItems
-
-  if (!id) {
-    return res.status(400).json({ message: "News item ID is required" });
-  }
-
-  try {
-    // Remove the news item from the newsItems array
-    const result = await AdminNews.updateOne(
-      {}, // assuming there's only one document holding all news
-      { $pull: { newsItems: { _id: id } } }
-    );
-
-    if (result.modifiedCount === 0) {
-      return res.status(404).json({ message: "News item not found" });
-    }
-
-    res.status(200).json({ message: "News item deleted successfully" });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
-
-
+// GET /banner
 router.get('/banner', authMiddleware, async (req, res) => {
   try {
     const banner = await AdminBanner.findOne();
-
-    if (!banner) {
-      return res.status(404).json({ message: 'No banner found' });
-    }
-
+    if (!banner) return res.status(404).json({ message: 'No banner found' });
     res.json(banner);
   } catch (err) {
-    console.error('[superadmin] GET /banner error:', err);
+    logger.error('GET /banner error', { error: err.message });
     res.status(500).json({ message: 'Server Error' });
   }
 });
 
-// ------------------- ALL CONTENT -------------------
+// ------------------- FORWARD TO LEAD ADMIN -------------------
 
-router.get('/all-content', async (req, res) => {
+router.put('/forward', async (req, res) => {
   try {
-    const newsDoc = await AdminNews.findOne();
-    const galleryDoc = await AdminGallery.findOne();
-    const toggle = await AdminToggle.findOne();
-    const banner = await AdminBanner.findOne();
-
-   
-
-    res.json({
-      newsItems: newsDoc ? newsDoc.newsItems : [],
-      galleryImages: galleryDoc ? galleryDoc.galleryImages : [],
-      banner: banner ? banner.images : [],
-      toggle: toggle ? toggle.isActive : false
-    });
-  } catch (error) {
-    console.error('GET /all-content error:', error);
-    res.status(500).json({ message: 'Server error fetching content' });
-  }
-});
-
-// ------------------- LEAD ADMIN RESTORE ROUTE -------------------
-
-router.put('/forward',  async (req, res) => {
-  try {
-    // Fetch data from admin collections
     const adminGalleryData = await AdminGallery.find();
     const adminNewsData = await AdminNews.find();
     const adminToggleData = await AdminToggle.find();
     const adminBannerData = await AdminBanner.find();
 
-    // Replace lead admin collections with admin data
-    await leadAdminGallery.deleteMany();
     await leadAdminGallery.insertMany(adminGalleryData);
 
-    await leadAdminNews.deleteMany();
     await leadAdminNews.insertMany(adminNewsData);
 
-    await leadAdminToggle.deleteMany();
     await leadAdminToggle.insertMany(adminToggleData);
 
-    await leadAdminBanner.deleteMany();
     await leadAdminBanner.insertMany(adminBannerData);
-
 
     await AdminGallery.deleteMany();
     await AdminNews.deleteMany();
     await AdminToggle.deleteMany();
     await AdminBanner.deleteMany();
 
+    logger.info('Forwarded admin data to lead admin', { action: 'PUT /forward' });
     res.status(200).json({ message: 'Lead admin data restored from admin collections successfully' });
   } catch (error) {
-    console.error('Error restoring lead admin data:', error);
+    logger.error('Error forwarding admin data', { error: error.message });
     res.status(500).json({ error: 'Failed to restore lead admin data' });
   }
 });

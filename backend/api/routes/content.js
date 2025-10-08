@@ -250,6 +250,7 @@ router.put('/banner',authMiddleware, async (req, res) => {
 router.get('/banner', authMiddleware, async (req, res) => {
   try {
     const banner = await Galleryy.findOne();
+    console.log('[content] GET /banner response', banner);
 
     if (!banner) {
       return res.status(404).json({ message: 'No banner found' });

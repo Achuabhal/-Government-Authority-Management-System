@@ -177,21 +177,7 @@ const AdminLayout = () => {
       {/* Main Section */}
       <main className="p-8">
         {/* Day Toggle Card */}
-        <div className="bg-white rounded-2xl shadow p-8 text-center mb-8">
-          <h1 className="text-2xl font-semibold text-gray-700">
-            {loading ? "Loading..." : toggleState.message}
-          </h1>
-          <Button
-            onClick={toggleDay}
-            className={`mt-4 ${
-              toggleState.isActive
-                ? "bg-red-500 hover:bg-red-600"
-                : "bg-green-500 hover:bg-green-600"
-            } text-white`}
-          >
-            {toggleState.isActive ? "Deactivate Day" : "Activate Day"}
-          </Button>
-        </div>
+      
 
         <Outlet />
       </main>
