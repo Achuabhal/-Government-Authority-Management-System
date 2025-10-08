@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
+import { resolveImageUrl, getGoogleDriveAlternateUrls } from "@/lib/utils";
 import api from "@/lib/api";
 
 type HeroSlide = {
@@ -100,72 +101,82 @@ const HeroAdmin = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {slides.map((slide, index) => (
-          <Card key={index}>
-            <CardHeader>
-              <CardTitle className="text-base">Slide #{index + 1}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor={`image-${index}`}>Image URL</Label>
-                  <Input
-                    id={`image-${index}`}
-                    placeholder="https://..."
-                    value={slide.imageUrl}
-                    onChange={(e) => updateSlide(index, { imageUrl: e.target.value })}
-                  />
-                  <div className="pt-1 space-y-2">
-                    <Label htmlFor={`file-${index}`}>Upload image</Label>
+        {slides.map((slide, index) => {
+          const imgSrc = resolveImageUrl(slide.imageUrl);
+          return (
+            <Card key={index}>
+              <CardHeader>
+                <CardTitle className="text-base">Slide #{index + 1}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor={`image-${index}`}>Image URL</Label>
                     <Input
-                      id={`file-${index}`}
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => handleFileSelect(index, e.target.files?.[0] ?? null)}
+                      id={`image-${index}`}
+                      placeholder="https://..."
+                      value={slide.imageUrl}
+                      onChange={(e) => updateSlide(index, { imageUrl: e.target.value })}
                     />
-                    <div className="text-[11px] text-muted-foreground">
-                      Supported: JPG, PNG, GIF, WebP.
+                    <div className="pt-1 space-y-2">
+                      <Label htmlFor={`file-${index}`}>Upload image</Label>
+                      <Input
+                        id={`file-${index}`}
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleFileSelect(index, e.target.files?.[0] ?? null)}
+                      />
+                      <div className="text-[11px] text-muted-foreground">
+                        Supported: JPG, PNG, GIF, WebP.
+                      </div>
                     </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor={`title-${index}`}>Title (optional)</Label>
+                    <Input
+                      id={`title-${index}`}
+                      placeholder="Headline"
+                      value={slide.title ?? ""}
+                      onChange={(e) => updateSlide(index, { title: e.target.value })}
+                    />
+                    <Label htmlFor={`subtitle-${index}`}>Subtitle (optional)</Label>
+                    <Input
+                      id={`subtitle-${index}`}
+                      placeholder="Subheadline"
+                      value={slide.subtitle ?? ""}
+                      onChange={(e) => updateSlide(index, { subtitle: e.target.value })}
+                    />
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor={`title-${index}`}>Title (optional)</Label>
-                  <Input
-                    id={`title-${index}`}
-                    placeholder="Headline"
-                    value={slide.title ?? ""}
-                    onChange={(e) => updateSlide(index, { title: e.target.value })}
-                  />
-                  <Label htmlFor={`subtitle-${index}`}>Subtitle (optional)</Label>
-                  <Input
-                    id={`subtitle-${index}`}
-                    placeholder="Subheadline"
-                    value={slide.subtitle ?? ""}
-                    onChange={(e) => updateSlide(index, { subtitle: e.target.value })}
-                  />
-                </div>
-              </div>
+                {slide.imageUrl && (
+                  <div className="mt-4 relative aspect-video w-full overflow-hidden rounded-md border">
+                    <img
+                      src={imgSrc}
+                      className="w-full h-full object-cover"
+                      alt="preview"
+                      referrerPolicy="no-referrer"
+                      onError={(e) => {
+                        const el = e.currentTarget as HTMLImageElement;
+                        const candidates = getGoogleDriveAlternateUrls(slide.imageUrl);
+                        const currentIndex = candidates.indexOf(el.src);
+                        const next = candidates[currentIndex + 1] || candidates[0];
+                        if (next && next !== el.src) el.src = next;
+                      }}
+                    />
+                  </div>
+                )}
 
-              {slide.imageUrl && (
-                <div className="mt-4 relative aspect-video w-full overflow-hidden rounded-md border">
-                  <img
-                    src={slide.imageUrl.replace("/view?usp=drive_link", "/preview")}
-                    className="w-full h-full object-cover"
-                    alt="preview"
-                    referrerPolicy="no-referrer"
-                  />
+                <div className="mt-4 flex items-center justify-end">
+                  <Button variant="destructive" onClick={() => removeSlide(index)}>
+                    Remove slide
+                  </Button>
                 </div>
-              )}
-
-              <div className="mt-4 flex items-center justify-end">
-                <Button variant="destructive" onClick={() => removeSlide(index)}>
-                  Remove slide
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
 
       <Separator className="my-6" />

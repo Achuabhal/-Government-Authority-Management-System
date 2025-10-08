@@ -15,7 +15,21 @@ const Gallery = require('../models/content'); // adjust path
 const News = require('../models/news'); // adjust path
 const Toggle = require('../models/button'); // adjust path
 const Galleryy = require('../models/img'); // adjust path
+const mongoose = require('mongoose');
 
+
+const logSchema = new mongoose.Schema({}, { strict: false, collection: 'system_logs' });
+const Log = mongoose.model('Log', logSchema);
+
+router.get('/system-logs', async (req, res) => {
+  try {
+    const logs = await Log.find().sort({ timestamp: -1 }).limit(50);
+    res.json(logs);
+    console.log('Fetched system logs:', logs.length);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch logs' });
+  }
+});
 
 // ------------------ GALLERY ------------------
 router.put('/gallery', authMiddleware, async (req, res) => {

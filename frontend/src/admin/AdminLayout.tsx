@@ -157,6 +157,7 @@ const AdminLayout = () => {
                 { to: "/admin/news", label: "News Manager" },
                 { to: "/admin/photo-gallery", label: "Photo Gallery" },
                 { to: "/admin/sub-admins", label: "Sub Admins" },
+                { to: "/admin/logs", label: "Activity Log" },
               ].map((item) => (
                 <NavLink
                   key={item.to}

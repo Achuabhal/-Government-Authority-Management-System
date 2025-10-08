@@ -179,6 +179,23 @@ router.put('/banner', authMiddleware, async (req, res) => {
   }
 });
 
+router.post("/remove", authMiddleware, async (req, res) => {
+  const { id } = req.body;
+  console.log("[Admin] Remove request for news item ID:", id);
+  if (!id) return res.status(400).json({ message: "News item ID is required" });
+
+  try {
+    const result = await AdminNews.updateOne({}, { $pull: { newsItems: { _id: id } } });
+    if (result.modifiedCount === 0) return res.status(404).json({ message: "News item not found" });
+
+    logger.info({ action: 'DELETE_NEWS_ITEM', performedBy: req.user.email, newsItemId: id, timestamp: new Date() });
+    res.status(200).json({ message: "News item deleted successfully" });
+  } catch (err) {
+    logger.error({ action: 'REMOVE_NEWS_ERROR', error: err.message, performedBy: req.user?.email, timestamp: new Date() });
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 // GET /banner
 router.get('/banner', authMiddleware, async (req, res) => {
   try {

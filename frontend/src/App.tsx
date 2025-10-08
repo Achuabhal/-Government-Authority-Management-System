@@ -24,6 +24,7 @@ import NewsArticle from "./pages/NewsArticle";
 import RTI from "./pages/RTI";
 
 import AdminLayout from "./admin/AdminLayout";
+import Log from "./admin/log";
 import AdminLogin from "./admin/AdminLogin";
 import SetupDemo from "./admin/SetupDemo";
 import HeroAdmin from "./admin/HeroAdmin";
@@ -154,6 +155,7 @@ function App() {
                   <Route path="super-email1" element={<SuperAdminEmail1 />} />
                   <Route path="news1" element={<NewsAdmin1 />} />
                   <Route path="photo-gallery1" element={<PhotoGalleryAdmin1 />} />
+                  
                 </Route>
 
                    <Route
@@ -169,6 +171,7 @@ function App() {
                   <Route path="super-email" element={<SuperAdminEmail />} />
                   <Route path="news" element={<NewsAdmin />} />
                   <Route path="photo-gallery" element={<PhotoGalleryAdmin />} />
+                  <Route path="logs" element={<Log />} />
                 </Route>
 
                 {/* Catch-all */}
