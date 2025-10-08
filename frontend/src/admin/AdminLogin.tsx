@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
-import api from "../lib/api"
-import { useEffect } from "react";
+import api from "../lib/api";
+
 export default function LoginOtp() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -10,23 +10,21 @@ export default function LoginOtp() {
   const [otp, setOtp] = useState("");
   const [showOtp, setShowOtp] = useState(false);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false); // 🔹 loading state
 
-    useEffect(() => {
+  useEffect(() => {
     const checkIfLoggedIn = async () => {
       try {
         const res = await api.get("/check");
-        if (res.data.role=="superadmin") {
-          navigate("/admin", { replace: true }); // already logged in → go to admin layout
+        if (res.data.role === "superadmin") {
+          navigate("/admin", { replace: true });
+        } else if (res.data.role === "leadadmin") {
+          navigate("/admin1", { replace: true });
+        } else if (res.data.role === "admin") {
+          navigate("/admin2", { replace: true });
         }
-        if (res.data.role=="leadadmin") {
-          navigate("/admin1", { replace: true }); // already logged in → go to admin layout
-        }
-        if (res.data.role=="admin") {
-          navigate("/admin2", { replace: true }); // already logged in → go to admin layout
-        }
-
       } catch (err) {
-        // Not logged in, stay on login page
+        // Not logged in, stay here
       }
     };
     checkIfLoggedIn();
@@ -40,14 +38,20 @@ export default function LoginOtp() {
       return;
     }
 
-    // ✅ Call backend to validate email + password
-   
-
     if (email && password) {
-    const res = await api.post("/login", { email, password, captchaToken });
-      if (res.data.success) {
-        setShowOtp(true); // show OTP input
-        alert("OTP sent to your email.");
+      try {
+        setLoading(true); // 🔹 start loading
+        const res = await api.post("/login", { email, password, captchaToken });
+        if (res.data.success) {
+          setShowOtp(true);
+          alert("OTP sent to your email.");
+        } else {
+          alert("Invalid email or password");
+        }
+      } catch (err) {
+        alert("Something went wrong. Please try again.");
+      } finally {
+        setLoading(false); // 🔹 stop loading
       }
     } else {
       alert("Enter email and password");
@@ -57,22 +61,24 @@ export default function LoginOtp() {
   // Handle OTP verification
   const handleOtpVerify = async (e: React.FormEvent) => {
     e.preventDefault();
+    try {
+      setLoading(true); // 🔹 start loading
+      const res = await api.post("/verify-otp", { email, otp });
+      const data = res.data.role;
 
-    // ✅ Normally backend verifies OTP
-    const res = await api.post("/verify-otp", { email, otp });
-    console.log(res.data.role);
-    const data = res.data.role;
-    console.log(data);
-    if (data=="superadmin") {
-          navigate("/admin"); // already logged in → go to admin layout
-        }
-        if (data=="leadadmin") {
-          navigate("/admin1"); // already logged in → go to admin layout
-        }
-        if (data=="admin") {
-          navigate("/admin2"); // already logged in → go to admin layout
-        }else {
-      alert("Invalid OTP. Try again!");
+      if (data === "superadmin") {
+        navigate("/admin");
+      } else if (data === "leadadmin") {
+        navigate("/admin1");
+      } else if (data === "admin") {
+        navigate("/admin2");
+      } else {
+        alert("Invalid OTP. Try again!");
+      }
+    } catch (err) {
+      alert("Something went wrong. Try again.");
+    } finally {
+      setLoading(false); // 🔹 stop loading
     }
   };
 
@@ -104,9 +110,12 @@ export default function LoginOtp() {
             </div>
             <button
               onClick={handleLogin}
-              className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700"
+              disabled={loading}
+              className={`w-full text-white p-3 rounded-lg transition ${
+                loading ? "bg-gray-400" : "bg-blue-600 hover:bg-blue-700"
+              }`}
             >
-              Login
+              {loading ? "Loading..." : "Login"}
             </button>
           </>
         ) : (
@@ -124,9 +133,12 @@ export default function LoginOtp() {
             />
             <button
               onClick={handleOtpVerify}
-              className="w-full bg-green-600 text-white p-3 rounded-lg hover:bg-green-700"
+              disabled={loading}
+              className={`w-full text-white p-3 rounded-lg transition ${
+                loading ? "bg-gray-400" : "bg-green-600 hover:bg-green-700"
+              }`}
             >
-              Verify OTP
+              {loading ? "Verifying..." : "Verify OTP"}
             </button>
           </>
         )}
