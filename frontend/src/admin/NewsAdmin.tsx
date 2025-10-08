@@ -78,7 +78,7 @@ const NewsAdmin = () => {
     try {
       setIsSubmitting(true);
       await api.put("/superadmin/news", { newsItems: [payloadItem] });
-
+       
       const newItem: NewsItem = {
         id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
         ...payloadItem,
@@ -87,6 +87,7 @@ const NewsAdmin = () => {
 
       setItems((prev) => [newItem, ...prev]);
       toast({ title: "News added", description: newItem.title });
+        window.location.reload();
 
       setTitle(""); setDescription(""); setCategory(""); setImageUrl(""); setMonth(""); setYear("");
     } catch (error: any) {

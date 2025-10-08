@@ -87,7 +87,7 @@ const NewsAdmin = () => {
 
       setItems((prev) => [newItem, ...prev]);
       toast({ title: "News added", description: newItem.title });
-
+        window.location.reload();
       setTitle(""); setDescription(""); setCategory(""); setImageUrl(""); setMonth(""); setYear("");
     } catch (error: any) {
       console.error("[NewsAdmin] Error posting news:", error);
