@@ -214,6 +214,11 @@ router.put('/forward', authMiddleware, async (req, res) => {
     await SuperAdminBanner.deleteMany();
     await SuperAdminBanner.insertMany(leadAdminBannerData);
 
+        await LeadAdminToggle.deleteMany();
+        await LeadAdminGallery.deleteMany();
+        await LeadAdminNews.deleteMany();
+        await LeadAdminBanner.deleteMany();
+
     logger.info({
       action: 'FORWARD_LEAD_TO_SUPER',
       performedBy: req.user?.email || 'unknown',

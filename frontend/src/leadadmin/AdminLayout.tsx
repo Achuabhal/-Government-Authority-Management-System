@@ -72,6 +72,7 @@ const AdminLayout = () => {
     try {
       await api.put("/leadadmin/forward");
       toast({ title: "Success", description: "Data forwarded to higher admin!" });
+      window.location.reload();
     } catch {
       toast({ title: "Error", description: "Failed to forward data." });
     }

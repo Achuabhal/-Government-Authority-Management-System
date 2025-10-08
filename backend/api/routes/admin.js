@@ -43,6 +43,8 @@ router.put('/gallery', async (req, res) => {
   }
 });
 
+
+
 // GET /gallery
 router.get('/gallery', authMiddleware, async (req, res) => {
   try {

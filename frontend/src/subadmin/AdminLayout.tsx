@@ -64,6 +64,7 @@ const AdminLayout = () => {
         title: "Success",
         description: "Data forwarded to higher admin!",
       });
+      window.location.reload();
     } catch {
       toast({
         title: "Error",
