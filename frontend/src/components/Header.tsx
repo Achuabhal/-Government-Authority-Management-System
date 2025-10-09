@@ -189,6 +189,8 @@ const Header = () => {
                 {link.label}
               </a>
             ))}
+            <RTIDropdown />
+            <Online />
           </div>
         )}
       </nav>
