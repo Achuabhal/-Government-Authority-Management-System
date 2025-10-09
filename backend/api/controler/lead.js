@@ -18,7 +18,7 @@ async function authMiddleware(req, res, next) {
     console.log("Authenticated user:", req.user);
     
     // Check role
-    if (user.role !== "admin") {
+    if (user.role !== "leadadmin") {
       console.log("Role not leadadmin");
       return res.status(403).json({ message: "Not allowed" });
     }
