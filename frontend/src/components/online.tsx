@@ -69,6 +69,15 @@ const Online = () => {
           </a>
         </DropdownMenuItem>
 
+         <DropdownMenuItem asChild>
+          <a
+            href="https://bda.karnataka.gov.in/grievance/public/dept_login/en"
+            className="w-full px-3 py-2 text-sm font-medium hover:bg-blue-50 cursor-pointer"
+          >
+            Public Grievance Officers login
+          </a>
+        </DropdownMenuItem>
+
         <DropdownMenuItem asChild>
           <a
             href="https://institute.bdabangalore.org/#/signin"
@@ -104,6 +113,7 @@ const Online = () => {
             Resolve Your Issues
           </a>
         </DropdownMenuItem>
+        
       </DropdownMenuContent>
     </DropdownMenu>
   );
