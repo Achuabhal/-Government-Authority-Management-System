@@ -1,4 +1,4 @@
-# BDA - Government Authority Management System
+#  - Government Authority Management System
 
 A modern, full-featured government authority website with public-facing pages and a role-based admin dashboard system.
 
