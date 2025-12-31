@@ -152,16 +152,6 @@ frontend/
 
 *Refer to `ADMIN_LOGIN_GUIDE.md` for detailed login credentials and setup*
 
-## 🌐 Deployment
-
-### Deploy to Vercel (Recommended)
-
-1. Push your code to GitHub
-2. Go to [vercel.com](https://vercel.com)
-3. Click "New Project"
-4. Import your GitHub repository
-5. Set root directory to `/frontend`
-6. Click "Deploy"
 
 ### Environment Variables
 
@@ -259,15 +249,7 @@ For issues, questions, or suggestions:
 
 This project is proprietary. All rights reserved.
 
-## 🎯 Roadmap
 
-- [ ] Mobile app version
-- [ ] Advanced analytics dashboard
-- [ ] Email notification system
-- [ ] Document management system
-- [ ] User feedback system
-- [ ] API rate limiting
-- [ ] Advanced caching strategies
 
 ## ✨ Version History
 
